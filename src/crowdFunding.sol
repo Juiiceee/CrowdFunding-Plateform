@@ -10,7 +10,7 @@ contract crowd {
 		uint256 nbEther;
 		uint256 nbDays;
 		address owner;
-		bool	finish;
+		bool finish;
 	}
 
 	campagne[] public _tabCamp;
@@ -24,11 +24,11 @@ contract crowd {
 	}
 
 	modifier isFinish(uint256 index) {
-		require(_tabCamp[index].finish == false , "Out of bound");
+		require(_tabCamp[index].finish == false, "Out of bound");
 		_;
 	}
 
-	modifier isCampagneOwner(uint index) {
+	modifier isCampagneOwner(uint256 index) {
 		require(_tabCamp[index].owner == msg.sender, "You aren't the campagne owner");
 		_;
 	}
@@ -52,7 +52,7 @@ contract crowd {
 		public
 		view
 		isIndex(index)
-		returns (string memory, string memory, uint256, uint, uint256, address, bool)
+		returns (string memory, string memory, uint256, uint256, uint256, address, bool)
 	{
 		return (
 			_tabCamp[index].name,
@@ -65,14 +65,13 @@ contract crowd {
 		);
 	}
 
-	function contributeCampagne(uint256 index) public payable isIndex(index) isPassed(index) isFinish(index)
-	{
+	function contributeCampagne(uint256 index) public payable isIndex(index) isPassed(index) isFinish(index) {
 		checkHistory[index][msg.sender] += msg.value;
 		_tabCamp[index].nbEther += msg.value;
 	}
 
-	function withdraw(uint index) public isIndex(index) isGood(index) isFinish(index){
-		uint valeurwei = _tabCamp[index].nbEtherRequired * 1 ether;
+	function withdraw(uint256 index) public isIndex(index) isGood(index) isFinish(index) {
+		uint256 valeurwei = _tabCamp[index].nbEtherRequired * 1 ether;
 		payable(msg.sender).transfer(valeurwei);
 		_tabCamp[index].finish = true;
 	}
