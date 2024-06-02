@@ -44,7 +44,7 @@ contract crowd {
 	}
 
 	function createCampagne(string memory name, string memory desc, uint256 nbEther, uint256 nbDays) public {
-		_tabCamp.push(campagne(name, desc, nbEther, 0, nbDays, msg.sender, false));
+		_tabCamp.push(campagne(name, desc, nbEther * 1 ether, 0, nbDays, msg.sender, false));
 		_index++;
 	}
 
@@ -70,9 +70,8 @@ contract crowd {
 		_tabCamp[index].nbEther += msg.value;
 	}
 
-	function withdraw(uint256 index) public isIndex(index) isGood(index) isFinish(index) {
-		uint256 valeurwei = _tabCamp[index].nbEtherRequired * 1 ether;
-		payable(msg.sender).transfer(valeurwei);
+	function withdraw(uint256 index) public isIndex(index) isCampagneOwner(index) isGood(index) isFinish(index) {
+		payable(msg.sender).transfer(_tabCamp[index].nbEtherRequired);
 		_tabCamp[index].finish = true;
 	}
 }
